@@ -1,0 +1,61 @@
+{% extends 'farmacia/base.html' %}
+{% block title %}Mis Pedidos{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl border border-gray-300">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Mis Pedidos</h2>
+
+        {% if pedidos %}
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-500 text-white">
+                        <th class="p-3">Medicamento</th>
+                        <th class="p-3">Cantidad</th>
+                        <th class="p-3">Sucursal</th>
+                        <th class="p-3">Estado</th>
+                        <th class="p-3">Entrega</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr class="border-b">
+                        <td class="p-3">{{ pedido.medicamento.nombre }}</td>
+                        <td class="p-3">{{ pedido.cantidad }}</td>
+                        <td class="p-3">{{ pedido.sucursal_solicitada.nombre }}</td>
+
+                        <!-- 🔹 Estado del pedido -->
+                        <td class="p-3">
+                            {% if pedido.estado == "pendiente" %}
+                                <span class="badge yellow">Pendiente</span>
+                                {% if pedido.transferencia_pendiente %}
+                                    <p class="text-sm text-red-500">Esperando transferencia...</p>
+                                {% endif %}
+                            {% elif pedido.estado == "enviado" %}
+                                <span class="badge blue">Enviado</span>
+                            {% elif pedido.estado == "completado" %}
+                                <span class="badge green">Entregado</span>
+                            {% else %}
+                                <span class="badge red">Cancelado</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- 🔹 Opción de Entrega -->
+                        <td class="p-3">
+                            {% if pedido.opcion_entrega == "retiro_sucursal" %}
+                                <span class="text-green-600">Retiro en sucursal</span>
+                            {% elif pedido.opcion_entrega == "envio_origen" %}
+                                <span class="text-blue-600">Envío a sucursal de origen</span>
+                            {% else %}
+                                <span class="text-gray-500">No especificado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center text-gray-600">No tienes pedidos aún.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'farmacia/base.html' %}
+{% block title %}Transferencias de Inventario{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Transferencia de Inventario</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                Transferir
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

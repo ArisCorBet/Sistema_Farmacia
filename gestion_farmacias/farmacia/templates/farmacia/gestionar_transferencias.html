@@ -1,0 +1,50 @@
+{% extends 'farmacia/base.html' %}
+{% block title %}Gestionar Transferencias{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md border border-gray-200">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Solicitudes de Transferencia Pendientes</h2>
+
+    {% if transferencias_pendientes %}
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full border-collapse border border-gray-300 shadow-md rounded-lg">
+                <thead class="bg-blue-500 text-white">
+                    <tr>
+                        <th class="border px-6 py-3 text-left">Medicamento</th>
+                        <th class="border px-6 py-3 text-left">Origen</th>
+                        <th class="border px-6 py-3 text-left">Destino</th>
+                        <th class="border px-6 py-3 text-left">Cantidad</th>
+                        <th class="border px-6 py-3 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-50">
+                    {% for t in transferencias_pendientes %}
+                    <tr class="hover:bg-gray-100 transition duration-200">
+                        <td class="border px-6 py-4 font-medium text-gray-800">{{ t.medicamento.nombre }}</td>
+                        <td class="border px-6 py-4 text-gray-700">{{ t.sucursal_origen.nombre }}</td>
+                        <td class="border px-6 py-4 text-gray-700">{{ t.sucursal_destino.nombre }}</td>
+                        <td class="border px-6 py-4 text-center text-gray-800 font-semibold">{{ t.cantidad }}</td>
+                        <td class="border px-6 py-4 flex justify-center space-x-2">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="transferencia_id" value="{{ t.id }}">
+                                <button name="accion" value="aprobar"
+                                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                                    ✅ Aprobar
+                                </button>
+                                <button name="accion" value="rechazar"
+                                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                                    ❌ Rechazar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-gray-500 text-center mt-6">No hay solicitudes de transferencia pendientes.</p>
+    {% endif %}
+</div>
+{% endblock %}

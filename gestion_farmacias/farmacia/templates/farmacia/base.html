@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Farmacia{% endblock %}</title>
+
+    {% load static %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="bg-gray-100">
+
+    <!-- 📌 Barra de Navegación Superior -->
+    <nav class="bg-blue-600 p-4 text-white flex justify-between items-center shadow-lg">
+        <div class="flex space-x-6">
+            <a href="{% url 'inicio' %}" class="font-bold text-lg">Inicio</a>
+
+            {% if user.is_authenticated %}
+                {% if user.perfil.rol == "cliente" %}
+                    <a href="{% url 'mis_pedidos' %}" class="hover:underline">Mis Pedidos</a>
+                    <a href="{% url 'listar_medicamentos' %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                        Realizar Pedido
+                    </a>
+                {% elif user.perfil.rol == "empleado" %}
+                    <a href="{% url 'gestionar_clientes_pedidos' %}" class="hover:underline">Clientes y Pedidos</a>
+                    <a href="{% url 'ver_inventario' %}" class="hover:underline">Inventario</a>
+                    <a href="{% url 'gestionar_transferencias' %}" class="hover:underline">Gestionar Transferencias</a>
+                    <a href="{% url 'transferencias_manual' %}" class="hover:underline">Transferencia Manual</a>
+                    <a href="{% url 'historial_transferencias' %}" class="hover:underline">Historial</a>
+                {% elif user.perfil.rol == "admin" %}
+                    <a href="{% url 'admin:index' %}" class="hover:underline">Panel Admin</a>
+                    <a href="{% url 'historial_transferencias' %}" class="hover:underline">Historial de Transferencias</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- 📌 Usuario y Cerrar Sesión -->
+        <div class="flex space-x-4 items-center">
+            {% if user.is_authenticated %}
+                <span class="mr-4 font-semibold flex items-center">
+                    <img src="{% static 'img/user-icon.png' %}" alt="User" class="w-8 h-8 rounded-full mr-2">
+                    Hola, {{ user.username }} ({{ user.perfil.rol|title }})
+                </span>
+                <form method="post" action="{% url 'logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        Cerrar Sesión
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="hover:underline">Iniciar Sesión</a>
+                <a href="{% url 'registro' %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Registrarse
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- 📌 Contenedor principal -->
+    <div class="container mx-auto mt-8 px-4">
+        {% if messages %}
+            <div class="max-w-3xl mx-auto">
+                {% for message in messages %}
+                    <div class="p-4 mb-4 text-white rounded-lg {% if message.tags == 'success' %}bg-green-500{% elif message.tags == 'error' %}bg-red-500{% else %}bg-yellow-500{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

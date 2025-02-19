@@ -1,0 +1,44 @@
+{% extends "farmacia/base.html" %}
+
+{% block title %}Historial de Stock{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-6">📦 Historial de Ajustes de Stock</h2>
+
+    {% if historial %}
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300 shadow-md rounded-lg">
+                <thead class="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
+                    <tr>
+                        <th class="border border-gray-300 px-6 py-3 text-left">Medicamento</th>
+                        <th class="border border-gray-300 px-6 py-3 text-left">Cantidad Añadida</th>
+                        <th class="border border-gray-300 px-6 py-3 text-left">Empleado</th>
+                        <th class="border border-gray-300 px-6 py-3 text-left">Fecha</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-50 divide-y divide-gray-200">
+                    {% for registro in historial %}
+                        <tr class="hover:bg-gray-100 transition duration-200">
+                            <td class="border border-gray-300 px-6 py-4 font-medium text-gray-800">
+                                {{ registro.inventario.medicamento.nombre }}
+                            </td>
+                            <td class="border border-gray-300 px-6 py-4 text-green-600 font-bold text-lg">
+                                +{{ registro.cantidad_aumentada }}
+                            </td>
+                            <td class="border border-gray-300 px-6 py-4 text-gray-700">
+                                {{ registro.empleado.username }}
+                            </td>
+                            <td class="border border-gray-300 px-6 py-4 text-gray-600">
+                                📅 {{ registro.fecha|date:"Y-m-d H:i" }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-gray-500 text-center mt-6 text-lg">🚫 No hay registros de ajustes de stock.</p>
+    {% endif %}
+</div>
+{% endblock %}

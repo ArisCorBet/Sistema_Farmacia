@@ -1,0 +1,63 @@
+{% extends 'farmacia/base.html' %}
+
+{% block title %}Realizar Pedido{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border border-gray-300">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">📦 Realizar Pedido</h2>
+
+        <p class="text-gray-600 mb-4"><strong> 💊 Medicamento:</strong> {{ medicamento.nombre }}</p>
+        <p class="text-gray-600 mb-4"><strong>📝 Descripción:</strong> {{ medicamento.descripcion }}</p>
+
+        {% if inventario %}
+            <p class="text-gray-600 mb-4">
+                <strong>📦 Stock Disponible en tu sucursal:</strong>
+                <span class="{% if inventario.cantidad > 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                    {{ inventario.cantidad }} unidades
+                </span>
+            </p>
+        {% else %}
+            <p class="text-gray-600 mb-4">
+                <strong>Stock Disponible en tu sucursal:</strong>
+                <span class="text-red-500">0 unidades</span>
+            </p>
+        {% endif %}
+
+        {% if sucursales_disponibles %}
+            <p class="text-gray-600 mb-4"><strong>🔍 También disponible en otras sucursales:</strong></p>
+            <ul class="list-disc ml-6 text-gray-600">
+                {% for item in sucursales_disponibles %}
+                    <li>
+                        {{ item.sucursal.nombre }}:
+                        <span class="{% if item.cantidad > 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                            {{ item.cantidad }} unidades disponibles
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600 mb-4">No hay stock disponible en otras sucursales.</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Input de Cantidad -->
+            <label class="block text-gray-700 font-semibold mb-1">🔢 Cantidad</label>
+            <input type="number" name="cantidad" min="1" class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+
+            <!-- Opciones de Entrega -->
+            <label class="block text-gray-700 font-semibold mt-4">📍 Opción de Entrega</label>
+            <select name="opcion_entrega" class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="retiro_sucursal">🏢 Retirar en la sucursal</option>
+                <option value="envio_origen">🚚 Enviar a la sucursal de origen</option>
+            </select>
+
+            <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105 mt-4">
+                Confirmar Pedido
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

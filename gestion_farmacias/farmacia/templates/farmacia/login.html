@@ -1,0 +1,23 @@
+{% extends 'farmacia/base.html' %}
+{% block title %}Iniciar Sesión{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Iniciar Sesión</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700">Usuario:</label>
+                <input class="w-full border rounded p-2" type="text" name="username" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Contraseña:</label>
+                <input class="w-full border rounded p-2" type="password" name="password" required>
+            </div>
+            <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Iniciar Sesión
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

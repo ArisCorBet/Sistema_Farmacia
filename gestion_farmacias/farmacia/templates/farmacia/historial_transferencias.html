@@ -1,0 +1,45 @@
+{% extends "farmacia/base.html" %}
+
+{% block title %}Historial de Transferencias{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-300 mt-10">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Historial de Transferencias</h2>
+
+    {% if transferencias %}
+        <div class="overflow-x-auto">
+            <table class="w-full border border-gray-300 shadow-md rounded-lg">
+                <thead class="bg-blue-600 text-white">
+                    <tr>
+                        <th class="p-3 text-left">Medicamento</th>
+                        <th class="p-3 text-left">Origen</th>
+                        <th class="p-3 text-left">Destino</th>
+                        <th class="p-3 text-left">Cantidad</th>
+                        <th class="p-3 text-left">Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-50">
+                    {% for transferencia in transferencias %}
+                    <tr class="border-b hover:bg-gray-100 transition duration-200">
+                        <td class="p-4 text-gray-800 font-semibold">{{ transferencia.medicamento.nombre }}</td>
+                        <td class="p-4 text-gray-700">{{ transferencia.sucursal_origen.nombre }}</td>
+                        <td class="p-4 text-gray-700">{{ transferencia.sucursal_destino.nombre }}</td>
+                        <td class="p-4 font-semibold text-blue-500">{{ transferencia.cantidad }}</td>
+                        <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-white text-sm font-bold
+                                {% if transferencia.estado == 'pendiente' %}bg-yellow-500
+                                {% elif transferencia.estado == 'aprobada' %}bg-green-500
+                                {% else %}bg-red-500{% endif %}">
+                                {{ transferencia.estado|title }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600 mt-6">No hay transferencias registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

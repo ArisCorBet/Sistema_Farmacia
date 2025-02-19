@@ -1,0 +1,38 @@
+{% extends 'farmacia/base.html' %}
+{% block title %}Seleccionar Medicamento{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl border border-gray-300">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Selecciona un Medicamento</h2>
+
+        {% if inventarios %}
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-500 text-white">
+                        <th class="p-3">Medicamento</th>
+                        <th class="p-3">Descripción</th>
+                        <th class="p-3">Stock en tu sucursal</th>
+                        <th class="p-3">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventarios %}
+                    <tr class="border-b">
+                        <td class="p-3">{{ item.medicamento.nombre }}</td>
+                        <td class="p-3">{{ item.medicamento.descripcion }}</td>
+                        <td class="p-3">{{ item.cantidad }} unidades</td>
+                        <td class="p-3">
+                            <a href="{% url 'realizar_pedido' item.medicamento.id %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                                Pedir
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center text-gray-600">No hay medicamentos disponibles en tu sucursal.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
